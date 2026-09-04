@@ -4,8 +4,16 @@ from database.db import get_connection
 
 
 class AddEquipment:
-    def __init__(self, parent):
+    def __init__(
+        self,
+        parent,
+        show_dashboard,
+        show_equipment
+    ):
         self.parent = parent
+
+        self.show_dashboard = show_dashboard
+        self.show_equipment = show_equipment
 
         self.frame = tk.Frame(
             parent,
@@ -40,6 +48,59 @@ class AddEquipment:
             padx=35,
             pady=(0, 25)
         )
+
+        # =========================
+        # TOP NAVIGATION
+        # =========================
+
+        nav_frame = tk.Frame(
+            self.frame,
+            bg="#171a21"
+        )
+        nav_frame.pack(
+            fill="x",
+            padx=35,
+            pady=(15, 0)
+        )
+
+        tk.Button(
+            nav_frame,
+            text="Dashboard",
+            font=("Arial", 10),
+            bg="#171a21",
+            fg="#8b93a1",
+            activebackground="#171a21",
+            activeforeground="#f3f4f6",
+            relief="flat",
+            cursor="hand2",
+            command=self.show_dashboard
+        ).pack(side="left", padx=(0, 20))
+
+        tk.Button(
+            nav_frame,
+            text="Equipment",
+            font=("Arial", 10),
+            bg="#171a21",
+            fg="#8b93a1",
+            activebackground="#171a21",
+            activeforeground="#f3f4f6",
+            relief="flat",
+            cursor="hand2",
+            command=self.show_equipment
+        ).pack(side="left", padx=20)
+
+        tk.Button(
+            nav_frame,
+            text="Add Equipment",
+            font=("Arial", 10, "bold"),
+            bg="#171a21",
+            fg="#f3f4f6",
+            activebackground="#171a21",
+            activeforeground="#f3f4f6",
+            relief="flat",
+            cursor="hand2",
+            command=lambda: None
+        ).pack(side="left", padx=20)
 
         # Form
         form = tk.Frame(

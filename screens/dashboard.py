@@ -3,8 +3,18 @@ from database.db import get_equipment_stats
 
 
 class Dashboard:
-    def __init__(self, parent):
+    def __init__(
+        self,
+        parent,
+        show_dashboard,
+        show_equipment,
+        show_add_equipment
+    ):
         self.parent = parent
+
+        self.show_dashboard = show_dashboard
+        self.show_equipment = show_equipment
+        self.show_add_equipment = show_add_equipment
 
         # Colors
         self.bg = "#0f1117"
@@ -62,13 +72,12 @@ class Dashboard:
         )
 
         nav_items = [
-            "Dashboard",
-            "Equipment",
-            "Add Equipment",
-            "Search"
+            ("Dashboard", self.show_dashboard),
+            ("Equipment", self.show_equipment),
+            ("Add Equipment", self.show_add_equipment)
         ]
 
-        for item in nav_items:
+        for item, command in nav_items:
             tk.Button(
                 nav_frame,
                 text=item,
@@ -79,7 +88,8 @@ class Dashboard:
                 activeforeground=self.text,
                 relief="flat",
                 borderwidth=0,
-                cursor="hand2"
+                cursor="hand2",
+                command=command
             ).pack(
                 side="left",
                 padx=10
@@ -174,12 +184,11 @@ class Dashboard:
         )
 
         actions = [
-            "+  Add Equipment",
-            "Equipment List",
-            "Search"
+            ("+  Add Equipment", self.show_add_equipment),
+            ("Equipment List", self.show_equipment)
         ]
 
-        for action in actions:
+        for action, command in actions:
             tk.Button(
                 actions_frame,
                 text=action,
@@ -191,7 +200,8 @@ class Dashboard:
                 relief="flat",
                 padx=20,
                 pady=12,
-                cursor="hand2"
+                cursor="hand2",
+                command=command
             ).pack(
                 side="left",
                 padx=(0, 10)

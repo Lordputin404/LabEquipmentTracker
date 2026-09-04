@@ -4,10 +4,10 @@ from database.db import get_connection
 
 
 class EditEquipment:
-    def __init__(self, parent, equipment_id):
+    def __init__(self, parent, equipment_id, show_equipment):
         self.parent = parent
         self.equipment_id = equipment_id
-
+        self.show_equipment = show_equipment
         self.frame = tk.Frame(
             parent,
             bg="#0f1117"
@@ -40,6 +40,26 @@ class EditEquipment:
             anchor="w",
             padx=35,
             pady=(0, 25)
+        )
+
+        # Back button
+        tk.Button(
+            self.frame,
+            text="← Back to Equipment",
+            font=("Arial", 10),
+            bg="#20242d",
+            fg="#f3f4f6",
+            activebackground="#292e38",
+            activeforeground="#ffffff",
+            relief="flat",
+            padx=15,
+            pady=8,
+            cursor="hand2",
+            command=self.go_back
+        ).pack(
+            anchor="w",
+            padx=35,
+            pady=(10, 5)
         )
 
         # Form
@@ -135,6 +155,10 @@ class EditEquipment:
         )
 
         self.load_equipment()
+
+    def go_back(self):
+        self.frame.destroy()
+        self.show_equipment()
 
     def create_field(self, parent, label, variable, row):
         tk.Label(
@@ -272,18 +296,3 @@ class EditEquipment:
                 "Database Error",
                 f"Could not update equipment.\n\n{error}"
             )
-
-    def edit_equipment(self):
-        selected = self.table.selection()
-
-        if not selected:
-            messagebox.showwarning(
-                "No Selection",
-                "Please select an equipment to edit."
-            )
-            return
-
-        item = self.table.item(selected[0])
-        equipment_id = item["values"][0]
-
-        print("Selected Equipment ID:", equipment_id)

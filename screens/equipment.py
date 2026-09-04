@@ -5,8 +5,18 @@ from screens.edit_equipment import EditEquipment
 
 
 class Equipment:
-    def __init__(self, parent):
+    def __init__(
+        self,
+        parent,
+        show_dashboard,
+        show_equipment,
+        show_add_equipment
+    ):
         self.parent = parent
+
+        self.show_dashboard = show_dashboard
+        self.show_equipment = show_equipment
+        self.show_add_equipment = show_add_equipment
 
         # =========================
         # MAIN FRAME
@@ -47,6 +57,59 @@ class Equipment:
             anchor="w",
             padx=35
         )
+
+        # =========================
+        # TOP NAVIGATION
+        # =========================
+
+        nav_frame = tk.Frame(
+            self.frame,
+            bg="#171a21"
+        )
+        nav_frame.pack(
+            fill="x",
+            padx=35,
+            pady=(15, 0)
+        )
+
+        tk.Button(
+            nav_frame,
+            text="Dashboard",
+            font=("Arial", 10),
+            bg="#171a21",
+            fg="#8b93a1",
+            activebackground="#171a21",
+            activeforeground="#f3f4f6",
+            relief="flat",
+            cursor="hand2",
+            command=self.show_dashboard
+        ).pack(side="left", padx=(0, 20))
+
+        tk.Button(
+            nav_frame,
+            text="Equipment",
+            font=("Arial", 10, "bold"),
+            bg="#171a21",
+            fg="#f3f4f6",
+            activebackground="#171a21",
+            activeforeground="#f3f4f6",
+            relief="flat",
+            cursor="hand2",
+            command=self.show_equipment
+        ).pack(side="left", padx=20)
+
+        tk.Button(
+            nav_frame,
+            text="Add Equipment",
+            font=("Arial", 10),
+            bg="#171a21",
+            fg="#8b93a1",
+            activebackground="#171a21",
+            activeforeground="#f3f4f6",
+            relief="flat",
+            cursor="hand2",
+            command=self.show_add_equipment
+        ).pack(side="left", padx=20)
 
         # =========================
         # TOOLBAR
@@ -450,7 +513,11 @@ class Equipment:
         equipment_id = item["values"][0]
 
         self.frame.destroy()
-        EditEquipment(self.parent, equipment_id)
+        EditEquipment(
+        self.parent,
+        equipment_id,
+        self.show_equipment
+    )
 
     def delete_equipment(self):
         selected = self.table.selection()
