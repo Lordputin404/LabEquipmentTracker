@@ -135,6 +135,25 @@ class Equipment:
             side="left"
         )
 
+        # Delete button
+        tk.Button(
+            toolbar,
+            text="Delete",
+            font=("Arial", 10, "bold"),
+            bg="#7f1d1d",
+            fg="#ffffff",
+            activebackground="#991b1b",
+            activeforeground="#ffffff",
+            relief="flat",
+            padx=15,
+            pady=8,
+            cursor="hand2",
+            command=self.delete_equipment
+        ).pack(
+            side="left",
+            padx=(10, 0)
+        )
+
         # =========================
         # TABLE CONTAINER
         # =========================
@@ -432,3 +451,53 @@ class Equipment:
 
         self.frame.destroy()
         EditEquipment(self.parent, equipment_id)
+
+    def delete_equipment(self):
+        selected = self.table.selection()
+
+        if not selected:
+            messagebox.showwarning(
+                "No Selection",
+                "Please select an equipment to delete."
+            )
+            return
+
+        item = self.table.item(selected[0])
+        equipment_id = item["values"][0]
+        equipment_name = item["values"][1]
+
+        confirm = messagebox.askyesno(
+            "Confirm Delete",
+            f"Are you sure you want to delete\n"
+            f"'{equipment_name}'?"
+        )
+
+        if not confirm:
+            return
+
+        try:
+            connection = get_connection()
+            cursor = connection.cursor()
+
+            cursor.execute(
+                "DELETE FROM equipment WHERE id = %s",
+                (equipment_id,)
+            )
+
+            connection.commit()
+
+            cursor.close()
+            connection.close()
+
+            messagebox.showinfo(
+                "Success",
+                "Equipment deleted successfully!"
+            )
+
+            self.load_equipment()
+
+        except Exception as error:
+            messagebox.showerror(
+                "Database Error",
+                f"Could not delete equipment.\n\n{error}"
+            )
