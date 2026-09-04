@@ -1,5 +1,5 @@
 import tkinter as tk
-from screens.equipment import Equipment
+from screens.add_equipment import AddEquipment
 
 
 def main():
@@ -8,7 +8,7 @@ def main():
     root.geometry("1000x600")
     root.minsize(900, 550)
 
-    Equipment(root)
+    AddEquipment(root)
 
     root.mainloop()
 
