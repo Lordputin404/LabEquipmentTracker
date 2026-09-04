@@ -45,3 +45,21 @@ def get_equipment_stats():
     connection.close()
 
     return total, working, maintenance, damaged
+
+def get_recent_equipment():
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT equipment_name, lab_name, condition_status
+        FROM equipment
+        ORDER BY id DESC
+        LIMIT 5
+    """)
+
+    records = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+
+    return records

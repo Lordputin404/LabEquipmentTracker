@@ -1,5 +1,5 @@
 import tkinter as tk
-from database.db import get_equipment_stats
+from database.db import get_equipment_stats, get_recent_equipment
 
 
 class Dashboard:
@@ -231,11 +231,19 @@ class Dashboard:
             expand=True
         )
 
-        equipment = [
-            ("Dell OptiPlex", "Computer Lab", "Working"),
-            ("Epson Projector", "Multimedia Lab", "Maintenance"),
-            ("Cisco Switch", "Networking Lab", "Working")
-        ]
+        equipment = get_recent_equipment()
+
+        if not equipment:
+            tk.Label(
+                recent_frame,
+                text="No equipment found",
+                font=("Arial", 10),
+                bg=self.panel,
+                fg=self.muted
+            ).pack(
+                padx=15,
+                pady=20
+            )
 
         for name, lab, status in equipment:
             row = tk.Frame(
