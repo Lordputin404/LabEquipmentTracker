@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from database.db import get_connection
+from screens.edit_equipment import EditEquipment
 
 
 class Equipment:
@@ -116,6 +117,24 @@ class Equipment:
             side="right"
         )
 
+        # Edit button
+        tk.Button(
+            toolbar,
+            text="Edit",
+            font=("Arial", 10, "bold"),
+            bg="#20242d",
+            fg="#f3f4f6",
+            activebackground="#292e38",
+            activeforeground="#f3f4f6",
+            relief="flat",
+            padx=15,
+            pady=8,
+            cursor="hand2",
+            command=self.edit_equipment
+        ).pack(
+            side="left"
+        )
+
         # =========================
         # TABLE CONTAINER
         # =========================
@@ -177,7 +196,6 @@ class Equipment:
             "lab",
             "quantity",
             "condition",
-            "assigned"
         )
 
         self.table = ttk.Treeview(
@@ -218,7 +236,6 @@ class Equipment:
             "lab": "Lab",
             "quantity": "Quantity",
             "condition": "Condition",
-            "assigned": "Assigned To"
         }
 
         for column in columns:
@@ -260,11 +277,6 @@ class Equipment:
             anchor="center"
         )
 
-        self.table.column(
-            "assigned",
-            width=150
-        )
-
         self.table.pack(
             side="left",
             fill="both",
@@ -297,8 +309,7 @@ class Equipment:
                    category,
                    lab_name,
                    quantity,
-                   condition_status,
-                   assigned_to
+                   condition_status
             FROM equipment
             ORDER BY id DESC
         """)
@@ -349,8 +360,7 @@ class Equipment:
                        category,
                        lab_name,
                        quantity,
-                       condition_status,
-                       assigned_to
+                       condition_status
                 FROM equipment
                 WHERE equipment_name LIKE %s
                    OR category LIKE %s
@@ -373,8 +383,7 @@ class Equipment:
                        category,
                        lab_name,
                        quantity,
-                       condition_status,
-                       assigned_to
+                       condition_status
                 FROM equipment
                 ORDER BY id DESC
             """)
@@ -407,3 +416,19 @@ class Equipment:
 
         cursor.close()
         connection.close()
+
+    def edit_equipment(self):
+        selected = self.table.selection()
+
+        if not selected:
+            messagebox.showwarning(
+                "No Selection",
+                "Please select an equipment to edit."
+            )
+            return
+
+        item = self.table.item(selected[0])
+        equipment_id = item["values"][0]
+
+        self.frame.destroy()
+        EditEquipment(self.parent, equipment_id)
